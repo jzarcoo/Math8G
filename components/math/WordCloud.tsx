@@ -29,9 +29,9 @@ const WORDS = [
 	{ text: "inverso modular", weight: 3 },
 ];
 
-const { width: WINDOW_WIDTH } = Dimensions.get('window');
+const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
 const CONTAINER_WIDTH = WINDOW_WIDTH - 40;
-const CONTAINER_HEIGHT = 280;
+const CONTAINER_HEIGHT = WINDOW_HEIGHT / 3 + 40;
 
 interface WordPosition {
 	top: number;
@@ -62,7 +62,7 @@ export function WordCloud() {
 			WORDS.forEach(word => {
 				const fontSize = 12 + word.weight * 1.6;
 				const width = word.text.length * fontSize * 0.6;
-				const height = fontSize * 1.4;
+				const height = fontSize * 1.2;
 				
 				let placed = false;
 				let attempts = 0;
