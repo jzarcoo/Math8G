@@ -31,7 +31,7 @@ const WORDS = [
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
 const CONTAINER_WIDTH = WINDOW_WIDTH - 40;
-const CONTAINER_HEIGHT = WINDOW_HEIGHT * 0.6;
+const CONTAINER_HEIGHT = Math.max(WINDOW_HEIGHT * 0.4, 200);
 
 interface WordPosition {
 	top: number;
