@@ -8,13 +8,16 @@ const WORDS = [
 	{ text: 'mcd', weight: 8 },
 	{ text: 'mcm', weight: 7 },
 	{ text: 'criba de eratosthenes', weight: 6 },
-	{ text: 'exponenciación binaria', weight: 5 },
-	{ text: 'gráficas', weight: 7 },
+	{ text: 'exponenciación binaria', weight: 15 },
+	{ text: 'teoría de gráficas', weight: 17 },
 	{ text: 'teoría de números', weight: 16 },
+	{ text: "coeficiente binomial", weight: 3 },
 	{ text: 'manipulación de bits', weight: 6 },
+	{ text: 'congruencias', weight: 5 },
 	{ text: 'algoritmo de euclides', weight: 5 },
 	{ text: 'teoría de juegos', weight: 8 },
 	{ text: 'juegos nim', weight: 10 },
+	{ text: "permutaciones", weight: 3 },
 	{ text: 'geometría', weight: 9 },
 	{ text: 'álgebra modular', weight: 8 },
 	{ text: 'convex hull', weight: 7 },
@@ -31,7 +34,7 @@ const WORDS = [
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
 const CONTAINER_WIDTH = WINDOW_WIDTH - 40;
-const CONTAINER_HEIGHT = Math.max(WINDOW_HEIGHT * 0.4, 200);
+const CONTAINER_HEIGHT = Math.max(WINDOW_HEIGHT /2, WINDOW_WIDTH/2);
 
 interface WordPosition {
 	top: number;
@@ -43,21 +46,36 @@ interface WordPosition {
 export function WordCloud() {
 	const theme = useColorScheme();
 	const [positions, setPositions] = useState<WordPosition[]>([]);
-	const lightColors = ['#2563eb', '#dc2626', '#059669', '#7c3aed', '#d97706', '#0ea5e9'];
-	const darkColors = ['#3b82f6', '#ef4444', '#10b981', '#8b5cf6', '#f59e0b', '#60a5fa'];
+	const themeColors = [
+		'orange',
+		'gold',
+		'tomato',
+		'turquoise',
+		'lime',
+		'green',
+		'blue',
+		'violet',
+		'magenta',
+		'red',
+		'yellow',
+		'pink',
+		'cyan',
+		'coral'
+	];
 
 	const getColorIndex = (text: string) => {
-		let hash = 0;
-		for (let i = 0; i < text.length; i++) {
-			hash = text.charCodeAt(i) + ((hash << 5) - hash);
-		}
-		return Math.abs(hash);
+		// let hash = 0;
+		// for (let i = 0; i < text.length; i++) {
+		// 	hash = text.charCodeAt(i) + ((hash << 5) - hash);
+		// }
+		// return Math.abs(hash);
+		// color aleatorio
+		return Math.floor(Math.random() * themeColors.length);
 	};
 
 	useEffect(() => {
 		const calculatePositions = () => {
 			const placedWords: WordPosition[] = [];
-			const themeColors = theme === 'dark' ? darkColors : lightColors;
 			
 			WORDS.forEach(word => {
 				const fontSize = 12 + word.weight * 1.6;

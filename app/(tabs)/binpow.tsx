@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import BinPowAnimation from '@/components/math/BinPowAnimation';
 
 export default function TabTwoScreen() {
   const theme = useColorScheme() ?? 'light';
@@ -31,11 +32,55 @@ export default function TabTwoScreen() {
         <ThemedText>
           Sin embargo, con exponentes grandes es muy lento.
         </ThemedText>
+        <ThemedText type="subtitle" style={{margin : 20}}>¿Cómo mejorarlo?</ThemedText>
+        <ThemedText>
+          El truco para calcular <ThemedText style={styles.code}>a^b</ThemedText> es usar la representación binaria del exponente
+        </ThemedText>
+        <ThemedText>
+          Con esta técnica podemos calcular <ThemedText style={styles.code}>a^n</ThemedText> en <ThemedText style={styles.code} type='defaultSemiBold'>O(log(n))</ThemedText>  
+          pues la representación binaria de <ThemedText style={styles.code}>n</ThemedText> tiene <ThemedText style={styles.code} type='defaultSemiBold'>{'\u230A'}log₂ n{'\u230B'}+1</ThemedText> bits.
+        </ThemedText>
         <ThemedText>
           13 en binario es <ThemedText style={styles.code}>1101₂</ThemedText>.  
-          Entonces, <ThemedText style={styles.center}>3^{13} = 3^8 × 3^4 × 3^1</ThemedText>
+          Entonces, <ThemedText style={styles.center}>3^{1101} = 3^1000 × 3^100 × 3^1</ThemedText><ThemedText style={styles.center}>= 3^8 × 3^4 × 3^1</ThemedText>
+          tiene menos multiplicaciones.
         </ThemedText>
       </ThemedView>
+      <View style={styles.centered}>
+        <View style={styles.codeBlock}>
+          <ThemedText style={styles.code}>{`
+          long long binpow(long long a, long long b) {
+              long long res = 1;
+              while (b > 0) {
+                  if (b & 1)
+                      res = res * a;
+                  a = a * a;
+                  b >>= 1;
+              }
+              return res;
+          }
+          `}</ThemedText>
+        </View>
+      </View>
+      {/* <BinPowAnimation /> */}
+      <View style={styles.centered}>
+        <ThemedText type="title">Módulo m</ThemedText>
+        <View style={styles.codeBlock}>
+          <ThemedText style={styles.code}>{`
+          long long binpow(long long a, long long b, long long m) {
+              a %= m;
+              long long res = 1;
+              while (b > 0) {
+                  if (b & 1)
+                      res = res * a % m;
+                  a = a * a % m;
+                  b >>= 1;
+              }
+              return res;
+          }
+          `}</ThemedText>
+        </View>
+      </View>
       <ExternalLink href="https://cp-algorithms.com/algebra/binary-exp.html">
           <ThemedText type="link">Learn more on cp-algorithms.com →</ThemedText>
       </ExternalLink>
@@ -64,5 +109,22 @@ const styles = StyleSheet.create({
     padding: 16,
     fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
     fontSize: 16,
-  }
+  }, 
+   centered: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+  },
+  codeBlock: {
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 12,
+    width: '90%',
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+  },
 });

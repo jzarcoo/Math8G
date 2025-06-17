@@ -16,63 +16,41 @@ export default function GCDAnimation() {
     const [running, setRunning] = useState(false);
     const timeouts = useRef<(number | NodeJS.Timeout)[]>([]);
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const fgColor = theme === 'light' ? '#000' : '#fff';
+    const highlight = theme === 'light' ? 'lightcoral' : 'orange';
+ // Compute gcd steps whenever inputs change
+  useEffect(() => {
+    const a0 = parseInt(inputA, 10);
+    const b0 = parseInt(inputB, 10);
+    if (isNaN(a0) || isNaN(b0) || a0 < 0 || b0 < 0) return;
+    const s: Step[] = [];
+    let a = a0, b = b0;
+    while (b !== 0) {
+      s.push({ a, b });
+      const temp = b;
+      b = a % b;
+      a = temp;
+    }
+    s.push({ a, b });
+    setSteps(s);
+    setCurrentStep(0);
+  }, [inputA, inputB]);
 
-    const computeSteps = (a: number, b: number): Step[] => {
-        const s: Step[] = [];
-        while (b !== 0) {
-            s.push({ a, b });
-            const temp = b;
-            b = a % b;
-            a = temp;
-        }
-        s.push({ a, b });
-        return s;
-    };
+  // Animate loop over steps
+  useEffect(() => {
+    if (!steps.length) return;
+    const timer = setInterval(() => {
+      Animated.sequence([
+        Animated.timing(fadeAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
+        Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
+      ]).start();
+      setCurrentStep((c) => (c + 1 < steps.length ? c + 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [steps]);
 
-    const startAnimation = () => {
-        const a = parseInt(inputA, 10);
-        const b = parseInt(inputB, 10);
-        if (isNaN(a) || isNaN(b) || a < 0 || b < 0) return;
-        reset();
-        const s = computeSteps(a, b);
-        setSteps(s);
-        setCurrentStep(0);
-        setRunning(true);
-        fadeAnim.setValue(0);
-        
-        timeouts.current.forEach(clearTimeout);
-        timeouts.current = [];
-        
-        s.forEach((_, i) => {
-            const timeout = setTimeout(() => {
-                setCurrentStep(i);
-                Animated.timing(fadeAnim, {
-                    toValue: 1,
-                    duration: 500,
-                    easing: Easing.out(Easing.exp),
-                    useNativeDriver: true,
-                }).start(() => fadeAnim.setValue(0));
-            }, i * 500);
-            timeouts.current.push(timeout);
-        });
-        
-        const endTimeout = setTimeout(() => {
-            setRunning(false);
-        }, s.length * 500);
-        timeouts.current.push(endTimeout);
-    };
-
-    const reset = () => {
-        timeouts.current.forEach(clearTimeout);
-        timeouts.current = [];
-        setSteps([]);
-        setCurrentStep(0);
-        setRunning(false);
-    };
-
-    useEffect(() => {
-        return () => reset();
-    }, []);
+  if (!steps.length) return null;
+  const { a, b } = steps[currentStep];
 
     const styles = StyleSheet.create({
         container: {
@@ -137,25 +115,25 @@ export default function GCDAnimation() {
         <View style={styles.container}>
             <View style={styles.inputRow}>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: fgColor, borderColor: highlight }]}
                     value={inputA}
                     keyboardType="numeric"
                     editable={!running}
                     onChangeText={setInputA}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: fgColor, borderColor: highlight }]}
                     value={inputB}
                     keyboardType="numeric"
                     editable={!running}
                     onChangeText={setInputB}
                 />
-                <Button 
+                {/* <Button 
                     title="Start" 
                     onPress={startAnimation} 
                     disabled={running} 
                     color={theme === 'light' ? 'lightcoral' : 'orange'}
-                />
+                /> */}
             </View>
 
             <View style={styles.stepsContainer}>
@@ -191,13 +169,13 @@ export default function GCDAnimation() {
                 }
             </View>
 
-            {steps.length > 0 && !running && steps[steps.length - 1].b === 0 && (
+            {/* {steps.length > 0 && !running && steps[steps.length - 1].b === 0 && (
                 <View style={styles.resultBox}>
                     <Text style={styles.resultText}>
                         Resultado: {steps[steps.length - 1].a}
                     </Text>
                 </View>
-            )}
+            )} */}
         </View>
     );
 }
