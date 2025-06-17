@@ -1,0 +1,160 @@
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { ThemedText } from '@/components/ThemedText';
+import { useColorScheme } from '@/hooks/useColorScheme';
+
+const WORDS = [
+	{ text: 'combinatoria', weight: 10 },
+	{ text: 'mcd', weight: 8 },
+	{ text: 'mcm', weight: 7 },
+	{ text: 'criba de eratosthenes', weight: 6 },
+	{ text: 'exponenciación binaria', weight: 5 },
+	{ text: 'gráficas', weight: 7 },
+	{ text: 'teoría de números', weight: 16 },
+	{ text: 'manipulación de bits', weight: 6 },
+	{ text: 'algoritmo de euclides', weight: 5 },
+	{ text: 'teoría de juegos', weight: 8 },
+	{ text: 'juegos nim', weight: 10 },
+	{ text: 'geometría', weight: 9 },
+	{ text: 'álgebra modular', weight: 8 },
+	{ text: 'convex hull', weight: 7 },
+	{ text: 'matrix exponentiation', weight: 6 },
+	{ text: 'fast fourier transform', weight: 10 },
+	{ text: 'probabilidad', weight: 7 },
+	{ text: 'teorema chino del residuo', weight: 5 },
+	{ text: 'pequeño teorema de fermat', weight: 4 },
+	{ text: 'números de catalán', weight: 6 },
+	{ text: 'números de fibonacci', weight: 3 },
+	{ text: "euler's totient function", weight: 3 },
+	{ text: "inverso modular", weight: 3 },
+];
+
+const { width: WINDOW_WIDTH } = Dimensions.get('window');
+const CONTAINER_WIDTH = WINDOW_WIDTH - 40;
+const CONTAINER_HEIGHT = 280;
+
+interface WordPosition {
+	top: number;
+	left: number;
+	rotation: number;
+	color: string;
+}
+
+export function WordCloud() {
+	const theme = useColorScheme();
+	const [positions, setPositions] = useState<WordPosition[]>([]);
+	const lightColors = ['#2563eb', '#dc2626', '#059669', '#7c3aed', '#d97706', '#0ea5e9'];
+	const darkColors = ['#3b82f6', '#ef4444', '#10b981', '#8b5cf6', '#f59e0b', '#60a5fa'];
+
+	const getColorIndex = (text: string) => {
+		let hash = 0;
+		for (let i = 0; i < text.length; i++) {
+			hash = text.charCodeAt(i) + ((hash << 5) - hash);
+		}
+		return Math.abs(hash);
+	};
+
+	useEffect(() => {
+		const calculatePositions = () => {
+			const placedWords: WordPosition[] = [];
+			const themeColors = theme === 'dark' ? darkColors : lightColors;
+			
+			WORDS.forEach(word => {
+				const fontSize = 12 + word.weight * 1.6;
+				const width = word.text.length * fontSize * 0.6;
+				const height = fontSize * 1.4;
+				
+				let placed = false;
+				let attempts = 0;
+				
+				while (!placed && attempts < 100) {
+					const left = Math.random() * (CONTAINER_WIDTH - width);
+					const top = Math.random() * (CONTAINER_HEIGHT - height);
+					const rotation = Math.random() * 90 - 45;
+					
+					const collision = placedWords.some(existing => {
+						const horizontalOverlap = 
+							Math.abs(left - existing.left) * 2 < (width + fontSize * 4);
+						const verticalOverlap = 
+							Math.abs(top - existing.top) * 2 < (height + fontSize * 2);
+						return horizontalOverlap && verticalOverlap;
+					});
+					
+					if (!collision) {
+						const colorIndex = getColorIndex(word.text) % themeColors.length;
+						placedWords.push({
+							top,
+							left,
+							rotation,
+							color: themeColors[colorIndex],
+						});
+						placed = true;
+					}
+					attempts++;
+				}
+			});
+			
+			setPositions(placedWords);
+		};
+		
+		calculatePositions();
+	}, [theme]);
+
+	if (positions.length === 0) {
+		return (
+			<View style={[styles.container, { height: CONTAINER_HEIGHT }]} />
+		);
+	}
+
+	return (
+		<View style={[styles.container, { height: CONTAINER_HEIGHT }]}>
+		{WORDS.map((w, idx) => {
+			if (idx >= positions.length) return null;
+			const { top, left, rotation, color } = positions[idx];
+			const fontSize = 12 + w.weight * 1.6;
+			return (
+			<View
+				key={idx}
+				style={[
+				styles.wordWrapper,{ 
+					top,
+					left,
+					transform: [{ rotate: `${rotation}deg` }],
+				}]}>
+				<ThemedText
+				style={[
+					styles.word,
+					{
+					fontSize,
+					color,
+					opacity: 0.9 - (idx * 0.03),
+					},
+				]}>
+				{w.text}
+				</ThemedText>
+			</View>
+			);
+		})}
+		</View>
+	);
+}
+
+const styles = StyleSheet.create({
+  	container: {
+		width: '100%',
+		position: 'relative',
+		marginVertical: 16,
+	},
+	wordWrapper: {
+		position: 'absolute',
+		padding: 4,
+	},
+	word: {
+		fontWeight: '800',
+		textShadowColor: 'rgba(0, 0, 0, 0.15)',
+		textShadowOffset: { width: 1, height: 1 },
+		textShadowRadius: 1,
+	},
+});
+
+export default WordCloud;

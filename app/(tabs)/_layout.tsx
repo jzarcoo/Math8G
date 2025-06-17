@@ -34,10 +34,24 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="binpow"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Binpow',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="bolt.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="gcd"
+        options={{
+          title: 'GCD',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="number" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="sieve"
+        options={{
+          title: 'Sieve',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="line.3.horizontal.decrease.circle" color={color} />,
         }}
       />
     </Tabs>
