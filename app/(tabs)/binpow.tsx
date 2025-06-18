@@ -32,7 +32,11 @@ export default function TabTwoScreen() {
         <ThemedText>
           Sin embargo, con exponentes grandes es muy lento.
         </ThemedText>
-        <ThemedText type="subtitle" style={{margin : 20}}>¿Cómo mejorarlo?</ThemedText>
+      </ThemedView>
+      <ThemedView>
+        <ThemedText type="subtitle">¿Cómo mejorarlo?</ThemedText>
+      </ThemedView>
+      <ThemedView>
         <ThemedText>
           El truco para calcular <ThemedText style={styles.code}>a^b</ThemedText> es usar la representación binaria del exponente
         </ThemedText>
@@ -40,11 +44,29 @@ export default function TabTwoScreen() {
           Con esta técnica podemos calcular <ThemedText style={styles.code}>a^n</ThemedText> en <ThemedText style={styles.code} type='defaultSemiBold'>O(log(n))</ThemedText>  
           pues la representación binaria de <ThemedText style={styles.code}>n</ThemedText> tiene <ThemedText style={styles.code} type='defaultSemiBold'>{'\u230A'}log₂ n{'\u230B'}+1</ThemedText> bits.
         </ThemedText>
+      </ThemedView>
+      <ThemedView>
         <ThemedText>
           13 en binario es <ThemedText style={styles.code}>1101₂</ThemedText>.  
-          Entonces, <ThemedText style={styles.center}>3^{1101} = 3^1000 × 3^100 × 3^1</ThemedText><ThemedText style={styles.center}>= 3^8 × 3^4 × 3^1</ThemedText>
+          Entonces, <ThemedText style={styles.center}>3¹¹⁰¹= 3¹⁰⁰⁰ × 3¹⁰⁰ × 3¹</ThemedText><ThemedText style={styles.center}>= 3⁸ × 3⁴ × 3¹</ThemedText>
           tiene menos multiplicaciones.
         </ThemedText>
+      </ThemedView>
+      <ThemedView>
+        <ThemedText>
+          De modo que solo necesitamos una forma rápida de calcular esos digitos.
+          Por suerte un elemento en la secuencia es solo el cuadrado de el elemento previo
+        </ThemedText>
+      </ThemedView>
+      <ThemedView>
+        <ThemedText style={styles.center}>3¹ = 3</ThemedText>
+        <ThemedText style={styles.center}>3¹⁰ = 3² = (3¹)² = 3² = 9</ThemedText>
+        <ThemedText style={styles.center}>3¹⁰⁰ = 3⁴ = (3²)² = 9² = 81</ThemedText>
+        <ThemedText style={styles.center}>3¹⁰⁰⁰ = 3⁸ = (3⁴)² = 81² = 6561</ThemedText>
+        <ThemedText>
+          Así que para llegar a la respuesta final solo necesitamos multiplicar 3 de ellos (nos saltamos porque ese bit no se encuentra prendido)
+          </ThemedText>
+        <ThemedText style={styles.center}>3¹³ = 3⁸ × 3⁴ × 3¹ = 6561 × 81 × 3 = 1 594 323</ThemedText>
       </ThemedView>
       <View style={styles.centered}>
         <View style={styles.codeBlock}>
@@ -62,7 +84,7 @@ export default function TabTwoScreen() {
           `}</ThemedText>
         </View>
       </View>
-      {/* <BinPowAnimation /> */}
+      <BinPowAnimation />
       <View style={styles.centered}>
         <ThemedText type="title">Módulo m</ThemedText>
         <View style={styles.codeBlock}>

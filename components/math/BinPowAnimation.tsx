@@ -1,124 +1,157 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Animated,
-  ScrollView,
+	View,
+	TextInput,
+	StyleSheet,
+	ScrollView,
 } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function BinPowAnimation() {
-  const theme = useColorScheme();
-  const fgColor = useColorScheme() === 'light' ? '#000' : '#fff';
-  const highlight = useColorScheme() === 'dark' ? '#ffa500' : '#f08080';
-  const [base, setBase] = useState(3);
-  const [exponent, setExponent] = useState(13);
-  const [steps, setSteps] = useState<{
-    a: number;
-    res: number;
-    bits: string[];
-    b: number;
-  }[]>([]);
-  const [current, setCurrent] = useState(0);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+	const fgColor = useColorScheme() === 'light' ? '#000' : '#fff';
+	const highlight = useColorScheme() === 'dark' ? '#ffa500' : '#f08080';
+	const [base, setBase] = useState(3);
+	const [exponent, setExponent] = useState(13);
+	const [steps, setSteps] = useState<{
+		a: number;
+		res: number;
+		bits: string[];
+		b: number;
+	}[]>([]);
+	const [current, setCurrent] = useState(0);
 
-  useEffect(() => {
-    let seq: { a: number; res: number; bits: string[]; b: number }[] = [];
-    let a = base;
-    let b = exponent;
-    let res = 1;
-    const bits = exponent.toString(2).split('').reverse();
-    seq.push({ a, res, bits, b });
-    while (b) {
-      if (b & 1) res *= a;
-      a *= a;
-      b >>= 1; 
-      seq.push({ a, res, bits, b });     
-    }
-    setSteps(seq);
-    setCurrent(0);
-  }, [base, exponent]);
+	useEffect(() => {
+		const bits = exponent.toString(2).split('');
+		let seq: { a: number; res: number; bits: string[]; b: number }[] = [];
+		let a = base;
+		let b = exponent;
+		let res = 1;
+		
+		seq.push({ a, res, bits, b });
+		
+		while (b) {
+			if (b & 1) res *= a;
+			a *= a;
+			b >>= 1; 
+			seq.push({ a, res, bits, b });     
+		}
+		
+		setSteps(seq);
+		setCurrent(0);
+	}, [base, exponent]);
 
-  useEffect(() => {
-    if (!steps.length) return;
-    const timer = setInterval(() => {
-      Animated.sequence([
-        Animated.timing(fadeAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
-        Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
-      ]).start();
-      setCurrent((c) => (c + 1 < steps.length ? c + 1 : 0));
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [steps]);
+	useEffect(() => {
+		if (!steps.length) return;
+		const timer = setInterval(() => {
+		setCurrent((c) => (c + 1 < steps.length ? c + 1 : 0));
+		}, 3000);
+		return () => clearInterval(timer);
+	}, [steps]);
 
-  if (!steps.length) return null;
-  const { a, res, bits, b } = steps[current];
-  
-  const bitPos = current - 1;
+	if (!steps.length) return null;
+	const { bits } = steps[current];
+	
+	const currentBitPosition = current > 0 
+		? bits.length - current 
+		: -1;
 
-  return (
-    <ScrollView style={[styles.container]}>      
-      <View style={styles.inputs}>
-        <Text style={[styles.label, { color: fgColor }]}>Base:</Text>
-        <TextInput
-          style={[styles.input, { color: fgColor, borderColor: highlight }]}
-          keyboardType="number-pad"
-          value={String(base)}
-          onChangeText={(t) => setBase(Number(t) || 0)}
-        />
-        <Text style={[styles.label, { color: fgColor }]}>Exp:</Text>
-        <TextInput
-          style={[styles.input, { color: fgColor, borderColor: highlight }]}
-          keyboardType="number-pad"
-          value={String(exponent)}
-          onChangeText={(t) => setExponent(Number(t) || 0)}
-        />
-      </View>
+	return (
+		<ScrollView style={[styles.container]}>      
+		<View style={styles.inputs}>
+			<ThemedText style={[styles.label, { color: fgColor }]}>Base:</ThemedText>
+			<TextInput
+			style={[styles.input, { color: fgColor, borderColor: highlight }]}
+			keyboardType="number-pad"
+			value={String(base)}
+			onChangeText={(t) => setBase(Number(t) || 0)}
+			/>
+			<ThemedText style={[styles.label, { color: fgColor }]}>Exp:</ThemedText>
+			<TextInput
+			style={[styles.input, { color: fgColor, borderColor: highlight }]}
+			keyboardType="number-pad"
+			value={String(exponent)}
+			onChangeText={(t) => setExponent(Number(t) || 0)}
+			/>
+		</View>
 
-      <View style={styles.binaryContainer}>
-        {bits.map((bit, idx) => (
-          <Text
-            key={idx}
-            style={[
-              styles.bit,
-              { color: fgColor },
-              idx === bitPos && { color: highlight, fontWeight: 'bold' },
-            ]}>
-            {bit}
-          </Text>
-        ))}
-      </View>
-      <View style={styles.arrowContainer}>
-        {bits.map((_, idx) => (
-          <Text
-            key={idx}
-            style={idx === bitPos ? [styles.arrow, { color: highlight }] : styles.arrowPlaceholder}>
-            ↑
-          </Text>
-        ))}
-      </View>
+		<View style={styles.binaryContainer}>
+			{bits.map((bit, idx) => (
+			<ThemedText
+				key={idx}
+				style={[
+				styles.bit,
+				idx === currentBitPosition && { color: highlight, fontWeight: 'bold' },
+				]}>
+				{bit}
+			</ThemedText>
+			))}
+		</View>
 
-      <Animated.View style={{ opacity: fadeAnim, marginTop: 20 }}>
-        {/* <Text style={[styles.text, { color: fgColor }]}>Iteración: {current}</Text> */}
-        <Text style={[styles.text, { color: fgColor }]}>a = {a}</Text>
-        <Text style={[styles.text, { color: fgColor }]}>res = {res}</Text>
-        <Text style={[styles.text, { color: fgColor }]}>b = {b}</Text>
-      </Animated.View>
-    </ScrollView>
-  );
+		<View style={styles.stepsContainer}>
+			{steps.slice(0, current + 1).map((step, idx) => (
+			<View 
+				key={idx} 
+				style={[
+				styles.stepRow,
+				idx === current && { backgroundColor: highlight + '22' }
+				]}
+			>
+				<ThemedText style={styles.stepText}>
+				{/* {`Iteración ${idx}: ${idx > 0 ? `(bit=${step.bits[step.bits.length - idx]}) ` : ''}`} */}
+				{`${idx > 0 ? `Iteración ${idx}: ` : ''}`}
+				</ThemedText>
+				<ThemedText style={styles.stepText}>res = {step.res}, </ThemedText>
+				<ThemedText style={styles.stepText}>a = {step.a}</ThemedText>
+			</View>
+			))}
+		</View>
+		</ScrollView>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  inputs: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  label: { fontSize: 16 },
-  input: { borderWidth: 1, padding: 6, width: 60, borderRadius: 6, textAlign: 'center' },
-  binaryContainer: { flexDirection: 'row', justifyContent: 'center', marginTop: 16 },
-  bit: { fontSize: 24, marginHorizontal: 4 },
-  arrowContainer: { flexDirection: 'row', justifyContent: 'center', marginTop: -8 },
-  arrow: { fontSize: 22, marginHorizontal: 8 , fontWeight: 'bold'},
-  arrowPlaceholder: { fontSize: 18, marginHorizontal: 8, color: 'transparent' },
-  text: { fontSize: 18, marginVertical: 4 },
+	container: { flex: 1, padding: 16 },
+	inputs: { 
+		flexDirection: 'row', 
+		alignItems: 'center', 
+		gap: 8,
+		marginBottom: 20 
+	},
+	label: { fontSize: 16 },
+	input: { 
+		borderWidth: 1, 
+		padding: 8, 
+		width: 60, 
+		borderRadius: 8, 
+		textAlign: 'center' 
+	},
+	binaryContainer: { 
+		flexDirection: 'row', 
+		justifyContent: 'center', 
+		marginBottom: 10
+	},
+	bit: { 
+		fontSize: 24, 
+		marginHorizontal: 8,
+		minWidth: 24,
+		textAlign: 'center'
+	},
+	stepsContainer: {
+		marginTop: 10,
+		// borderTopWidth: 1,
+		// borderTopColor: '#444',
+		paddingTop: 15
+	},
+	stepRow: {
+		padding: 12,
+		borderRadius: 8,
+		marginVertical: 6,
+		flexDirection: 'row',
+		flexWrap: 'wrap'
+	},
+	stepText: {
+		fontSize: 16,
+		marginRight: 8,
+	}
 });
