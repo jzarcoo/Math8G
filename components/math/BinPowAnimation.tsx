@@ -27,7 +27,6 @@ export default function BinPowAnimation() {
 		let a = base;
 		let b = exponent;
 		let res = 1;
-		
 		seq.push({ a, res, bits, b });
 		
 		while (b) {
@@ -45,7 +44,7 @@ export default function BinPowAnimation() {
 		if (!steps.length) return;
 		const timer = setInterval(() => {
 		setCurrent((c) => (c + 1 < steps.length ? c + 1 : 0));
-		}, 3000);
+		}, 2000);
 		return () => clearInterval(timer);
 	}, [steps]);
 
@@ -69,9 +68,22 @@ export default function BinPowAnimation() {
 			<ThemedText style={[styles.label, { color: fgColor }]}>Exp:</ThemedText>
 			<TextInput
 			style={[styles.input, { color: fgColor, borderColor: highlight }]}
-			keyboardType="number-pad"
+			// keyboardType="number-pad"
 			value={String(exponent)}
-			onChangeText={(t) => setExponent(Number(t) || 0)}
+			onChangeText={(t) => 
+			{
+				if(Number(t) < 0)
+				{
+					setBase(1 / base);
+					setExponent(Math.abs(Number(t)));
+				}
+				else
+				{
+					setBase(base);
+					setExponent(Number(t));
+				}
+			}
+			}
 			/>
 		</View>
 

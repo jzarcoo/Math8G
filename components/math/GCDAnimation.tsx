@@ -22,7 +22,7 @@ export default function GCDAnimation() {
   useEffect(() => {
     const a0 = parseInt(inputA, 10);
     const b0 = parseInt(inputB, 10);
-    if (isNaN(a0) || isNaN(b0) || a0 < 0 || b0 < 0) return;
+    if (isNaN(a0) || isNaN(b0)) return;
     const s: Step[] = [];
     let a = a0, b = b0;
     while (b !== 0) {
@@ -45,7 +45,7 @@ export default function GCDAnimation() {
         Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
       ]).start();
       setCurrentStep((c) => (c + 1 < steps.length ? c + 1 : 0));
-    }, 1000);
+    }, 2000);
     return () => clearInterval(timer);
   }, [steps]);
 
