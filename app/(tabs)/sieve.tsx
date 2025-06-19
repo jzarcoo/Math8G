@@ -41,14 +41,14 @@ export default function SieveScreen() {
         <ThemedText type="title">¿Es primo? O(n)</ThemedText>
         <View style={styles.codeBlock}>
           <ThemedText style={styles.code}>{`
-          bool esPrimo(int n) {
-              for (int i = 2; i < n; i++) {
-                  if (n % i == 0) {
-                      return false;
-                  }
-              }
-              return true;
-          }
+bool esPrimo(int n) {
+	for (int i = 2; i < n; i++) {
+		if (n % i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
           `}</ThemedText>
         </View>
       </View>
@@ -76,14 +76,14 @@ export default function SieveScreen() {
         <ThemedText type="title">¿Es primo? O(√n)</ThemedText>
         <View style={styles.codeBlock}>
           <ThemedText style={styles.code}>{`
-          bool esPrimo(int n) {
-              for (int i = 2; i*i < n; i++) {
-                  if (n % i == 0) {
-                      return false;
-                  }
-              }
-              return true;
-          }
+bool esPrimo(int n) {
+	for (int i = 2; i*i < n; i++) {
+		if (n % i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
           `}</ThemedText>
         </View>
       </View>
@@ -92,18 +92,18 @@ export default function SieveScreen() {
         <ThemedText type="title"></ThemedText>
         <View style={styles.codeBlock}>
           <ThemedText style={styles.code}>{`
-          vector<bool> criba(int n) {
-              vector<bool> prime(n+1, true);
-              prime[0] = prime[1] = false;
-              for (int i = 2; i <= n; i++) {
-                  if (prime[i]) {
-                      for(int j = 2*i; j <= n; j += i) {
-                          prime[j] = false;
-                      }
-                  }
-              }
-              return prime;
-          }
+vector<bool> criba(int n) {
+	vector<bool> prime(n+1, true);
+	prime[0] = prime[1] = false;
+	for (int i = 2; i <= n; i++) {
+		if (prime[i]) {
+			for(int j = 2*i; j <= n; j += i) {
+				prime[j] = false;
+			}
+		}
+	}
+	return prime;
+}
           `}</ThemedText>
         </View>
       </View>
@@ -111,18 +111,18 @@ export default function SieveScreen() {
         <ThemedText type="title">O(log log n)</ThemedText>
         <View style={styles.codeBlock}>
           <ThemedText style={styles.code}>{`
-          vector<bool> criba(int n) {
-              vector<bool> prime(n+1, true);
-              prime[0] = prime[1] = false;
-              for (int i = 2; i*i <= n; i++) {
-                  if (prime[i]) {
-                      for(int j = i*i; j <= n; j += i) {
-                          prime[j] = false;
-                      }
-                  }
-              }
-              return prime;
-          }
+vector<bool> criba(int n) {
+	vector<bool> prime(n+1, true);
+	prime[0] = prime[1] = false;
+	for (int i = 2; i*i <= n; i++) {
+		if (prime[i]) {
+			for(int j = i*i; j <= n; j += i) {
+				prime[j] = false;
+			}
+		}
+	}
+	return prime;
+}
           `}</ThemedText>
         </View>
       </View>
@@ -134,52 +134,53 @@ export default function SieveScreen() {
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: '100%',
-    width: 200,
-    bottom: -50,
-    left: 0,
-    position: 'absolute',
-    objectFit: 'contain',
-  },
-  description: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  bold: {
-    fontWeight: 'bold',
-  },
-  italic: {
-    fontStyle: 'italic',
-  },
-   centered: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-  },
-  codeBlock: {
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 12,
-    width: '90%',
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-  },
-  code: {
-    fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
-    fontSize: 16,
-  },
+	titleContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+	},
+	stepContainer: {
+		gap: 8,
+		marginBottom: 8,
+	},
+	reactLogo: {
+		height: '100%',
+		width: 200,
+		bottom: -50,
+		left: 0,
+		position: 'absolute',
+		objectFit: 'contain',
+	},
+	description: {
+		gap: 8,
+		marginBottom: 8,
+	},
+	bold: {
+		fontWeight: 'bold',
+	},
+	italic: {
+		fontStyle: 'italic',
+	},
+	centered: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: 15,
+	},
+	codeBlock: {
+		paddingVertical: 15,
+		paddingHorizontal: 30,
+		borderRadius: 8,
+		marginTop: 12,
+		width: '90%',
+		shadowOffset: {
+		width: 5,
+		height: 5,
+		},
+		shadowOpacity: 0.34,
+		shadowRadius: 6.27,
+	},
+	code: {
+		fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
+		fontSize: 14,
+	},
 });

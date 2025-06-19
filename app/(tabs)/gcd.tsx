@@ -62,11 +62,11 @@ export default function GCDScreen() {
           <ThemedText type="title">GCD</ThemedText>
           <View style={styles.codeBlock}>
             <ThemedText style={styles.code}>{`
-            int gcd (int a, int b) {
-                if (b == 0)
-                    return a;
-                return gcd(b, a % b);
-            }
+int gcd (int a, int b) {
+	if (b == 0)
+		return a;
+	return gcd(b, a % b);
+}
             `}</ThemedText>
           </View>
         </View>
@@ -74,13 +74,13 @@ export default function GCDScreen() {
           <ThemedText type="title">O (log min(a, b))</ThemedText>
           <View style={styles.codeBlock}>
             <ThemedText style={styles.code}>{`
-            int gcd (int a, int b) {
-                while (b) {
-                    a %= b;
-                    swap(a, b);
-                }
-                return a;
-            }
+int gcd (int a, int b) {
+	while (b) {
+		a %= b;
+		swap(a, b);
+	}
+	return a;
+}
             `}</ThemedText>
           </View>
         </View>
@@ -97,9 +97,9 @@ export default function GCDScreen() {
           <ThemedText type="title">LCM</ThemedText>
           <View style={styles.codeBlock}>
             <ThemedText style={styles.code}>{`
-            int lcm(int a, int b) {
-                return a / gcd(a, b) * b;
-            }
+int lcm(int a, int b) {
+	return a / gcd(a, b) * b;
+}
             `}</ThemedText>
           </View>
         </View>
@@ -114,49 +114,50 @@ export default function GCDScreen() {
 
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: '100%',
-    width: 200,
-    bottom: -50,
-    left: 35,
-    position: 'absolute',
-    objectFit: 'contain',
-  },
-  description: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  italic: {
-    fontStyle: 'italic',
-  },
-   centered: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-  },
-  codeBlock: {
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 12,
-    width: '90%',
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-  },
-  code: {
-    fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
-    fontSize: 16,
-  },
+	titleContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+	},
+	stepContainer: {
+		gap: 8,
+		marginBottom: 8,
+	},
+	reactLogo: {
+		height: '100%',
+		width: 200,
+		bottom: -50,
+		left: 35,
+		position: 'absolute',
+		objectFit: 'contain',
+	},
+	description: {
+		gap: 8,
+		marginBottom: 8,
+	},
+	italic: {
+		fontStyle: 'italic',
+	},
+	centered: {
+		alignItems: 'center',
+		justifyContent: 'center',
+    	paddingVertical: 16,
+	},
+	codeBlock: {
+		paddingVertical: 15,
+    	paddingHorizontal: 30,
+		borderRadius: 8,
+		marginTop: 12,
+		width: '90%',
+		shadowOffset: {
+			width: 5,
+			height: 5,
+		},
+		shadowOpacity: 0.34,
+		shadowRadius: 6.27,
+	},
+	code: {
+		fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
+		fontSize: 14,
+	},
 });

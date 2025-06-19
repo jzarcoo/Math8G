@@ -41,8 +41,7 @@ export default function TabTwoScreen() {
           El truco para calcular <ThemedText style={styles.code}><ThemedText style={[{position : 'relative'}]}>a<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>n</ThemedText></ThemedText></ThemedText>  es usar la representación binaria del exponente
         </ThemedText>
         <ThemedText>
-          Con esta técnica podemos calcular <ThemedText style={styles.code}><ThemedText style={[{position : 'relative'}]}>a<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>n</ThemedText></ThemedText></ThemedText>  en <ThemedText style={styles.code} type='defaultSemiBold'>O(log(n))</ThemedText>  
-          pues la representación binaria de <ThemedText style={styles.code}>n</ThemedText> tiene <ThemedText style={styles.code} type='defaultSemiBold'>{'\u230A'}log₂ n{'\u230B'} + 1</ThemedText> bits.
+          Con esta técnica podemos calcular <ThemedText style={styles.code}><ThemedText style={[{position : 'relative'}]}>a<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>n</ThemedText></ThemedText></ThemedText>  en <ThemedText style={styles.code} type='defaultSemiBold'>O(log(n))</ThemedText> pues la representación binaria de <ThemedText style={styles.code}>n</ThemedText> tiene <ThemedText style={styles.code} type='defaultSemiBold'>{'\u230A'}log₂ n{'\u230B'} + 1</ThemedText> bits.
         </ThemedText>
       </ThemedView>
       
@@ -79,41 +78,46 @@ export default function TabTwoScreen() {
         <ThemedText>
           Así que para llegar a la respuesta final solo necesitamos multiplicar 3 de ellos (nos saltamos <ThemedText style={[{position : 'relative'}]}>3<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>2</ThemedText></ThemedText>  porque ese bit no se encuentra prendido)
         </ThemedText>
-        <ThemedText style={styles.center}>3<ThemedText style={styles.exponent}>13</ThemedText> = 3<ThemedText style={styles.exponent}>8</ThemedText> x 3<ThemedText style={styles.exponent}>4</ThemedText> x 3<ThemedText style={styles.exponent}>1</ThemedText> = 6561 x 81 x 3 = 1 594 323</ThemedText>
+        <ThemedText style={styles.center}>3<ThemedText style={styles.exponent}>13</ThemedText> = 3<ThemedText style={styles.exponent}>8</ThemedText> x 3<ThemedText style={styles.exponent}>4</ThemedText> x 3<ThemedText style={styles.exponent}>1</ThemedText> 
+        </ThemedText> 
+        <ThemedText style={styles.center}>= 6561 x 81 x 3 
+          </ThemedText> 
+        <ThemedText style={styles.center}>= 1 594 323</ThemedText>
       </ThemedView>
       <View style={styles.centered}>
         <View style={styles.codeBlock}>
-          <ThemedText style={styles.code}>{`
-          long long binpow(long long a, long long b) {
-              long long res = 1;
-              while (b > 0) {
-                  if (b & 1)
-                      res = res * a;
-                  a = a * a;
-                  b >>= 1;
-              }
-              return res;
-          }
-          `}</ThemedText>
+<ThemedText style={styles.code}>{`
+long long binpow(long long a, long long b) {
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a;
+        a = a * a;
+        b >>= 1;
+    }
+    return res;
+}
+`}</ThemedText>
         </View>
       </View>
       <BinPowAnimation />
       <View style={styles.centered}>
         <ThemedText type="title">Módulo m</ThemedText>
         <View style={styles.codeBlock}>
-          <ThemedText style={styles.code}>{`
-          long long binpow(long long a, long long b, long long m) {
-              a %= m;
-              long long res = 1;
-              while (b > 0) {
-                  if (b & 1)
-                      res = res * a % m;
-                  a = a * a % m;
-                  b >>= 1;
-              }
-              return res;
-          }
-          `}</ThemedText>
+<ThemedText style={styles.code}>{`
+long long binpow(long long a, long long b, long long m) {
+    a %= m;
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1) {
+            res = res * a % m;
+        }
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
+`}</ThemedText>
         </View>
       </View>
       <ExternalLink href="https://cp-algorithms.com/algebra/binary-exp.html">
@@ -135,23 +139,24 @@ const styles = StyleSheet.create({
   },
   code: {
     fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
-    fontSize: 16,
+    fontSize: 14,
   },
   center: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
+    paddingVertical: 15,
     fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
     fontSize: 16,
   }, 
    centered: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
+    paddingVertical: 15,
   },
   codeBlock: {
-    padding: 12,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
     borderRadius: 8,
     marginTop: 12,
     width: '90%',
