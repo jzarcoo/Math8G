@@ -26,7 +26,7 @@ export default function TabTwoScreen() {
       {/* 1. Problema */}
       <ThemedView>
         <ThemedText>
-          Para calcular <ThemedText style={styles.code}><ThemedText style={[{position : 'relative'}]}>3<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>13</ThemedText></ThemedText></ThemedText>    harías <ThemedText style={styles.center}>3×3×3×…×3</ThemedText> 
+          Para calcular <ThemedText style={styles.code}><ThemedText style={[{position : 'relative'}]}>3<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>13</ThemedText></ThemedText></ThemedText>    harías <ThemedText style={styles.center}>3 x 3 x 3 x … x 3</ThemedText> 
           13 veces.  
         </ThemedText>
         <ThemedText>
@@ -49,7 +49,19 @@ export default function TabTwoScreen() {
       <ThemedView>
         <ThemedText>
           13 en binario es <ThemedText style={styles.code}>1101₂</ThemedText>.  
-          Entonces, <ThemedText style={styles.center}>3<ThemedText style={styles.exponent}>1101</ThemedText> = 3<ThemedText style={styles.exponent}>1000</ThemedText> x 3<ThemedText style={styles.exponent}>100</ThemedText> x 3<ThemedText style={styles.exponent}>1</ThemedText></ThemedText><ThemedText style={styles.center}>= 3⁸ × 3⁴ × 3¹</ThemedText>
+          Entonces, 
+          <ThemedText style={styles.center}>
+            3<ThemedText style={styles.exponent}>1101</ThemedText> = 3
+            <ThemedText style={styles.exponent}>1000</ThemedText> x 3
+            <ThemedText style={styles.exponent}>100</ThemedText> x 3
+            <ThemedText style={styles.exponent}>1</ThemedText>
+          </ThemedText>
+          <ThemedText style={styles.center}>
+              = 3
+              <ThemedText style={styles.exponent}>8</ThemedText> x 3
+              <ThemedText style={styles.exponent}>4</ThemedText> x 3
+              <ThemedText style={styles.exponent}>1</ThemedText>
+          </ThemedText>
           tiene menos multiplicaciones.
         </ThemedText>
       </ThemedView>
@@ -65,8 +77,8 @@ export default function TabTwoScreen() {
         <ThemedText style={styles.center}>3<ThemedText style={styles.exponent}>100</ThemedText> = 3<ThemedText style={styles.exponent}>4</ThemedText> = (3<ThemedText style={styles.exponent}>2</ThemedText>)<ThemedText style={styles.exponent}>2</ThemedText> = 9<ThemedText style={styles.exponent}>2</ThemedText> = 81</ThemedText>
         <ThemedText style={styles.center}>3<ThemedText style={styles.exponent}>1000</ThemedText> = 3<ThemedText style={styles.exponent}>8</ThemedText> = (3<ThemedText style={styles.exponent}>4</ThemedText>)<ThemedText style={styles.exponent}>2</ThemedText> = 81<ThemedText style={styles.exponent}>2</ThemedText> = 6561</ThemedText>
         <ThemedText>
-          Así que para llegar a la respuesta final solo necesitamos multiplicar 3 de ellos (nos saltamos 3<ThemedText style={styles.exponent}>2</ThemedText> porque ese bit no se encuentra prendido)
-          </ThemedText>
+          Así que para llegar a la respuesta final solo necesitamos multiplicar 3 de ellos (nos saltamos <ThemedText style={[{position : 'relative'}]}>3<ThemedText style={[{position : 'absolute', top: -6, fontSize : 10}]}>2</ThemedText></ThemedText>  porque ese bit no se encuentra prendido)
+        </ThemedText>
         <ThemedText style={styles.center}>3<ThemedText style={styles.exponent}>13</ThemedText> = 3<ThemedText style={styles.exponent}>8</ThemedText> x 3<ThemedText style={styles.exponent}>4</ThemedText> x 3<ThemedText style={styles.exponent}>1</ThemedText> = 6561 x 81 x 3 = 1 594 323</ThemedText>
       </ThemedView>
       <View style={styles.centered}>
