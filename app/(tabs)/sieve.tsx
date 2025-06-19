@@ -108,7 +108,7 @@ vector<bool> criba(int n) {
         </View>
       </View>
       <View style={styles.centered}>
-        <ThemedText type="title">O(log log n)</ThemedText>
+        <ThemedText type="title">O(n log log n)</ThemedText>
         <View style={styles.codeBlock}>
           <ThemedText style={styles.code}>{`
 vector<bool> criba(int n) {
